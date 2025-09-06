@@ -1,45 +1,49 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Product, PageResponse } from "../types";
+import { useState } from "react";
 import {
   getProducts,
   createProduct,
   updateProduct,
   deleteProduct,
 } from "../api/products";
+import type { Product } from "../types/product";
 
-// Hook para obtener productos
-export const useProducts = (page = 0) => {
-  return useQuery<PageResponse<Product>>({
-    queryKey: ["products", page],
-    queryFn: () => getProducts(page),
-    keepPreviousData: true,
-  });
-};
+export const useProducts = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(false);
 
-// Hook para crear producto
-export const useCreateProduct = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: createProduct,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
-  });
-};
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const data = await getProducts();
+      setProducts(data.content);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-// Hook para actualizar producto
-export const useUpdateProduct = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Partial<Product> }) =>
-      updateProduct(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
-  });
-};
+  const addProduct = async (product: Omit<Product, "id">) => {
+    const newProduct = await createProduct(product);
+    setProducts((prev) => [...prev, newProduct]);
+  };
 
-// Hook para eliminar producto
-export const useDeleteProduct = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: deleteProduct,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["products"] }),
-  });
+  const editProduct = async (id: number, product: Omit<Product, "id">) => {
+    const updated = await updateProduct(id, product);
+    setProducts((prev) => prev.map((p) => (p.id === id ? updated : p)));
+  };
+
+  const removeProduct = async (id: number) => {
+    await deleteProduct(id);
+    setProducts((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  return {
+    products,
+    loading,
+    fetchProducts,
+    addProduct,
+    editProduct,
+    removeProduct,
+  };
 };

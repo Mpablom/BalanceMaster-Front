@@ -1,72 +1,77 @@
-import React, { useState } from "react";
-import { useProducts, useCreateProduct } from "../hooks/useProducts";
+import { useState, useEffect } from "react";
+import { useProducts } from "../hooks/useProducts";
+import ProductForm from "../components/products/ProductForm";
+import ProductTable from "../components/products/ProductTable";
+import type { Product } from "../types/product";
 
 export default function ProductsPage() {
-  const [page, setPage] = useState(0);
-  const { data, isLoading, error } = useProducts(page);
-  const createProduct = useCreateProduct();
+  const {
+    products,
+    fetchProducts,
+    addProduct,
+    editProduct,
+    removeProduct,
+    loading,
+  } = useProducts();
 
-  const handleAddProduct = async () => {
-    const name = prompt("Nombre del producto?");
-    const barcode = prompt("Código de barras (opcional)?");
-    const description = prompt("Descripción (opcional)?");
-    const purchasePrice = Number(prompt("Precio de compra?"));
-    const salePrice = Number(prompt("Precio de venta?"));
-    const minStock = Number(prompt("Stock mínimo?"));
+  const [showForm, setShowForm] = useState(false);
+  const [editing, setEditing] = useState<Product | null>(null);
 
-    if (!name || isNaN(purchasePrice) || isNaN(salePrice) || isNaN(minStock)) {
-      alert("Datos inválidos");
-      return;
-    }
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
-    await createProduct.mutateAsync({
-      name,
-      barcode: barcode || null,
-      description: description || null,
-      purchasePrice,
-      salePrice,
-      minStock,
-    });
+  const handleAdd = () => {
+    setEditing(null);
+    setShowForm(true);
   };
 
-  if (isLoading) return <p>Cargando productos...</p>;
-  if (error) return <p>Error cargando productos</p>;
+  const handleEdit = (product: Product) => {
+    setEditing(product);
+    setShowForm(true);
+  };
+
+  const handleSubmit = async (data: Omit<Product, "id">) => {
+    if (editing) await editProduct(editing.id, data);
+    else await addProduct(data);
+    setShowForm(false);
+  };
 
   return (
-    <div>
-      <h1>Productos</h1>
-      <button onClick={handleAddProduct}>Agregar Producto</button>
-      <ul>
-        {data?.content.map((product) => (
-          <li key={product.id}>
-            <strong>{product.name}</strong>
-            <br />
-            Código: {product.barcode ?? "—"}
-            <br />
-            Compra: ${product.purchasePrice} | Venta: ${product.salePrice}
-            <br />
-            Stock mínimo: {product.minStock}
-          </li>
-        ))}
-      </ul>
+    <div className="p-6 space-y-4 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+      <h1 className="text-2xl font-bold text-purple-700 dark:text-purple-400">
+        Productos
+      </h1>
 
-      <div>
-        <button
-          disabled={page === 0}
-          onClick={() => setPage((old) => Math.max(old - 1, 0))}
-        >
-          Anterior
-        </button>
-        <span>
-          Página {data?.number + 1} de {data?.totalPages}
-        </span>
-        <button
-          disabled={page + 1 >= (data?.totalPages || 0)}
-          onClick={() => setPage((old) => old + 1)}
-        >
-          Siguiente
-        </button>
-      </div>
+      {loading ? (
+        <p>Cargando...</p>
+      ) : (
+        <>
+          {!showForm && (
+            <>
+              <button
+                onClick={handleAdd}
+                className="mb-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+              >
+                + Nuevo producto
+              </button>
+              <ProductTable
+                products={products}
+                onEdit={handleEdit}
+                onDelete={removeProduct}
+              />
+            </>
+          )}
+
+          {showForm && (
+            <ProductForm
+              initialData={editing ?? undefined}
+              onSubmit={handleSubmit}
+              onCancel={() => setShowForm(false)}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }
