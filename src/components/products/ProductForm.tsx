@@ -43,6 +43,7 @@ export default function ProductForm({
       onSubmit={handleSubmit}
       className="space-y-3 bg-white dark:bg-gray-800 p-4 rounded shadow-lg max-w-md mx-auto mt-6"
     >
+      <label>Código de barras</label>
       <input
         type="text"
         name="barcode"
@@ -51,6 +52,7 @@ export default function ProductForm({
         onChange={handleChange}
         className="w-full border p-2 rounded dark:bg-gray-700 dark:text-white"
       />
+      <label>Nombre</label>
       <input
         type="text"
         name="name"
@@ -59,6 +61,7 @@ export default function ProductForm({
         onChange={handleChange}
         className="w-full border p-2 rounded dark:bg-gray-700 dark:text-white"
       />
+      <label>Descripción</label>
       <textarea
         name="description"
         placeholder="Descripción"
@@ -66,6 +69,7 @@ export default function ProductForm({
         onChange={handleChange}
         className="w-full border p-2 rounded dark:bg-gray-700 dark:text-white"
       />
+      <label>Precio de compra</label>
       <input
         type="number"
         name="purchasePrice"
@@ -74,6 +78,7 @@ export default function ProductForm({
         onChange={handleChange}
         className="w-full border p-2 rounded dark:bg-gray-700 dark:text-white"
       />
+      <label>Precio de venta</label>
       <input
         type="number"
         name="salePrice"
@@ -82,6 +87,7 @@ export default function ProductForm({
         onChange={handleChange}
         className="w-full border p-2 rounded dark:bg-gray-700 dark:text-white"
       />
+      <label>Stock minimo</label>
       <input
         type="number"
         name="minStock"

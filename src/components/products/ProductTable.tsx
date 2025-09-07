@@ -8,7 +8,7 @@ interface Props {
 
 export default function ProductTable({ products, onEdit, onDelete }: Props) {
   return (
-    <table className="w-full text-left border-collapse rounded shadow overflow-hidden mt-6">
+    <table className="w-full text-left border-collapse rounded-lg shadow-lg overflow-hidden mt-6 ">
       <thead>
         <tr className="bg-purple-600 text-white">
           <th className="p-2">Nombre</th>
@@ -23,7 +23,7 @@ export default function ProductTable({ products, onEdit, onDelete }: Props) {
         {products.map((p) => (
           <tr
             key={p.id}
-            className="border-b hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-700 shadow-lg rounded-lg"
           >
             <td className="p-2">{p.name}</td>
             <td className="p-2">{p.barcode}</td>

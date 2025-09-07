@@ -20,7 +20,7 @@ const lowStock = [
 
 export default function Dashboard() {
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-4 min-h-screen">
+    <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white p-4 min-h-screen rounded-lg">
       <header className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold">Dashboard</h1>
         <ThemeToggle />
