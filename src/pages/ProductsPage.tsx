@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useProducts } from "../hooks/useProducts";
 import ProductForm from "../components/products/ProductForm";
 import ProductTable from "../components/products/ProductTable";
 import type { Product } from "../types/product";
-import ThemeToggle from "../components/ThemeToggle";
+import { useProducts } from "../hooks/useProducts";
+import { useCategories } from "../hooks/useCategories";
 
 export default function ProductsPage() {
   const {
@@ -14,6 +14,7 @@ export default function ProductsPage() {
     removeProduct,
     loading,
   } = useProducts();
+  const { categories, loading: loadingCategories } = useCategories();
 
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -32,13 +33,16 @@ export default function ProductsPage() {
     setShowForm(true);
   };
 
-  const handleSubmit = async (data: Omit<Product, "id">) => {
+  const handleSubmit = async (
+    data: Omit<Product, "id"> & { categoryId: number; initialStock?: number },
+  ) => {
     if (editingProduct) {
       await editProduct(editingProduct.id, data);
     } else {
-      await addProduct(data);
+      await addProduct({ ...data, initialStock: data.initialStock ?? 0 });
     }
     setShowForm(false);
+    setEditingProduct(null);
   };
 
   const handleCancel = () => {
@@ -46,41 +50,37 @@ export default function ProductsPage() {
     setEditingProduct(null);
   };
 
+  if (loading || loadingCategories) return <p>Cargando...</p>;
+
   return (
     <div className="rounded-lg p-4 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <header className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold text-purple-700 dark:text-purple-400">
           Productos
         </h1>
-        <ThemeToggle />
+        {!showForm && (
+          <button
+            onClick={handleAdd}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+          >
+            + Nuevo producto
+          </button>
+        )}
       </header>
 
-      {loading && !showForm ? (
-        <p>Cargando...</p>
+      {showForm ? (
+        <ProductForm
+          product={editingProduct ?? undefined}
+          categories={categories}
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+        />
       ) : (
-        <>
-          {showForm ? (
-            <ProductForm
-              initialData={editingProduct ?? undefined}
-              onSubmit={handleSubmit}
-              onCancel={handleCancel}
-            />
-          ) : (
-            <>
-              <button
-                onClick={handleAdd}
-                className="mb-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
-              >
-                + Nuevo producto
-              </button>
-              <ProductTable
-                products={products}
-                onEdit={handleEdit}
-                onDelete={removeProduct}
-              />
-            </>
-          )}
-        </>
+        <ProductTable
+          products={products}
+          onEdit={handleEdit}
+          onDelete={removeProduct}
+        />
       )}
     </div>
   );

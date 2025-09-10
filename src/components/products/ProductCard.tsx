@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent } from "../ui/card";
 import type { Product } from "../../types/product";
 
@@ -8,17 +7,14 @@ interface Props {
 
 export default function ProductCard({ product }: Props) {
   return (
-    <Card className="hover:shadow-lg transition-shadow duration-200">
-      <CardContent className="space-y-2">
-        <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">
-          {product.name}
-        </h3>
+    <Card title={product.name}>
+      <CardContent>
         {product.description && (
-          <p className="text-sm text-gray-600 dark:text-gray-300">
+          <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
             {product.description}
           </p>
         )}
-        <div className="flex justify-between items-center mt-2">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-2 gap-2">
           <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">
             Compra: ${product.purchasePrice}
           </span>
@@ -26,8 +22,11 @@ export default function ProductCard({ product }: Props) {
             Venta: ${product.salePrice}
           </span>
         </div>
+        <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Stock actual: {product.inventory?.quantity ?? 0}
+        </div>
         <div className="text-sm text-gray-500 dark:text-gray-400">
-          Stock mínimo: {product.minStock}
+          Categoría: {product.category?.name ?? "Sin categoría"}
         </div>
       </CardContent>
     </Card>

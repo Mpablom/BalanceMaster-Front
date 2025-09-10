@@ -1,3 +1,16 @@
+export interface Inventory {
+  productName: string;
+  quantity: number;
+  lastUpdated: string;
+}
+
+export interface Category {
+  id: number;
+  name: string;
+  description?: string;
+  marginPercentage: number;
+}
+
 export interface Product {
   id: number;
   barcode?: string | null;
@@ -7,14 +20,6 @@ export interface Product {
   salePrice: number;
   minStock: number;
   deleted: boolean;
-}
-
-export interface PageResponse<T> {
-  content: T[];
-  totalPages: number;
-  totalElements: number;
-  number: number;
-  size: number;
-  first: boolean;
-  last: boolean;
+  inventory?: Inventory;
+  category?: Category;
 }

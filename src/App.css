@@ -45,3 +45,8 @@
 .read-the-docs {
   color: #888;
 }
+
+.graphics {
+  display: flex;
+  flex-direction: columns;
+}
