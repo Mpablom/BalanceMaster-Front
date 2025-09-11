@@ -11,7 +11,7 @@ export default function AppRouter() {
         <Route index element={<Navigate to="/dashboard" />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="products" element={<ProductsPage />} />
-        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="categories" element={<CategoriesPage />} />
       </Route>
     </Routes>
   );

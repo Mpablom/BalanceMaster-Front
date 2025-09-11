@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import type { Category } from "../types/category";
 import {
   getCategories,
@@ -34,8 +35,23 @@ export function useCategories() {
   };
 
   const removeCategory = async (id: number) => {
-    await deleteCategory(id);
-    setCategories((prev) => prev.filter((c) => c.id !== id));
+    try {
+      await deleteCategory(id);
+      toast.success("Categoría eliminada");
+      await fetchCategories();
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosError = err as {
+          response?: { data?: { message?: string } };
+        };
+        toast.error(
+          axiosError.response?.data?.message ||
+            "No se puede eliminar la categoría porque tiene productos asociados",
+        );
+      } else {
+        toast.error("Error inesperado al eliminar la categoría");
+      }
+    }
   };
 
   useEffect(() => {
