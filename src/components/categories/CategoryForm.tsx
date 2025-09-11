@@ -12,7 +12,9 @@ export default function CategoryForm({ category, onSubmit, onCancel }: Props) {
   const [form, setForm] = useState<Omit<Category, "id">>({
     name: category?.name ?? "",
     description: category?.description ?? "",
-    marginPercentage: category?.marginPercentage ?? undefined,
+    marginPercentage: category?.marginPercentage
+      ? category.marginPercentage * 100 // Mostrar como %
+      : undefined,
   });
 
   const handleChange = (
@@ -31,7 +33,15 @@ export default function CategoryForm({ category, onSubmit, onCancel }: Props) {
       alert("El nombre es obligatorio");
       return;
     }
-    onSubmit(form);
+
+    const payload = {
+      ...form,
+      marginPercentage: form.marginPercentage
+        ? form.marginPercentage / 100 // Convertir a decimal antes de enviar
+        : 0,
+    };
+
+    onSubmit(payload);
   };
 
   return (
