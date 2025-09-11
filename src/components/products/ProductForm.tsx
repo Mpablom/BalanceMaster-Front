@@ -6,11 +6,11 @@ interface ProductFormData {
   barcode: string;
   name: string;
   description: string;
-  purchasePrice: number;
-  salePrice: number;
-  minStock: number;
-  initialStock: number;
-  categoryId: number;
+  purchasePrice: number | "";
+  salePrice: number | "";
+  minStock: number | "";
+  initialStock: number | "";
+  categoryId: number | "";
   deleted: boolean;
 }
 
@@ -31,11 +31,11 @@ export default function ProductForm({
     barcode: product?.barcode ?? "",
     name: product?.name ?? "",
     description: product?.description ?? "",
-    purchasePrice: product?.purchasePrice ?? 0,
-    salePrice: product?.salePrice ?? 0,
-    minStock: product?.minStock ?? 0,
-    initialStock: product?.inventory?.quantity ?? 0,
-    categoryId: product?.category?.id ?? 0, // <- 0 = sin categoría seleccionada
+    purchasePrice: product?.purchasePrice ?? "",
+    salePrice: product?.salePrice ?? "",
+    minStock: product?.minStock ?? "",
+    initialStock: product?.inventory?.quantity ?? "",
+    categoryId: product?.category?.id ?? 0,
     deleted: product?.deleted ?? false,
   });
 
@@ -54,7 +54,9 @@ export default function ProductForm({
         name === "minStock" ||
         name === "initialStock" ||
         name === "categoryId"
-          ? Number(value)
+          ? value === ""
+            ? ""
+            : Number(value)
           : value,
     }));
   };
@@ -65,7 +67,16 @@ export default function ProductForm({
       alert("Debe seleccionar una categoría");
       return;
     }
-    onSubmit(form);
+
+    const normalizedForm = {
+      ...form,
+      purchasePrice: form.purchasePrice === "" ? 0 : form.purchasePrice,
+      salePrice: form.salePrice === "" ? 0 : form.salePrice,
+      minStock: form.minStock === "" ? 0 : form.minStock,
+      initialStock: form.initialStock === "" ? 0 : form.initialStock,
+    };
+
+    onSubmit(normalizedForm);
   };
 
   return (

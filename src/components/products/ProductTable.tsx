@@ -14,7 +14,7 @@ export default function ProductTable({ products, onEdit, onDelete }: Props) {
         {products.map((p) => (
           <div
             key={p.id}
-            className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow"
+            className="bg-gray-100 dark:bg-gray-200 p-4 rounded-lg shadow"
           >
             <div className="flex justify-between items-center mb-2">
               <span className="font-bold text-purple-700 dark:text-purple-400">

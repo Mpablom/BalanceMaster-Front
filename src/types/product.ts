@@ -8,7 +8,7 @@ export interface Category {
   id: number;
   name: string;
   description?: string;
-  marginPercentage: number;
+  marginPercentage?: number;
 }
 
 export interface Product {
