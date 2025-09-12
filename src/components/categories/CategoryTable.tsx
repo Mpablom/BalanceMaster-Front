@@ -49,10 +49,10 @@ export default function CategoryTable({ categories, onEdit, onDelete }: Props) {
       </div>
 
       {/* Desktop: tabla */}
-      <div className="hidden sm:block overflow-x-auto">
-        <table className="w-full text-left border-collapse rounded-lg shadow-lg overflow-hidden mt-6">
+      <div className="hidden sm:block overflow-x-auto rounded-xl">
+        <table className="w-full text-left border-collapse rounded-lg shadow-2xl">
           <thead>
-            <tr className="bg-purple-600 text-white">
+            <tr className="bg-purple-900 text-white">
               <th className="p-2">Nombre</th>
               <th className="p-2">Descripción</th>
               <th className="p-2">Margen %</th>
@@ -63,7 +63,7 @@ export default function CategoryTable({ categories, onEdit, onDelete }: Props) {
             {categories.map((c) => (
               <tr
                 key={c.id}
-                className="bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
+                className="bg-[#f1f1f1] hover:bg-gray-300 text-gray-900"
               >
                 <td className="p-2 font-semibold">{c.name}</td>
                 <td className="p-2">{c.description ?? "-"}</td>

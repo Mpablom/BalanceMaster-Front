@@ -53,7 +53,7 @@ export default function ProductsPage() {
   if (loading || loadingCategories) return <p>Cargando...</p>;
 
   return (
-    <div className="rounded-lg p-4 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="rounded-lg px-4 py-6 min-h-screen bg-transparent">
       <header className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold text-purple-700 dark:text-purple-400">
           Productos

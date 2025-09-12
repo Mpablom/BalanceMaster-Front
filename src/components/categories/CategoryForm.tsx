@@ -57,9 +57,9 @@ export default function CategoryForm({ category, onSubmit, onCancel }: Props) {
               name="name"
               value={form.name}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                         focus:border-purple-500 focus:ring-purple-500
-                         dark:bg-gray-700 dark:text-white h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
               required
             />
           </div>
@@ -72,9 +72,9 @@ export default function CategoryForm({ category, onSubmit, onCancel }: Props) {
               name="description"
               value={form.description}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                         focus:border-purple-500 focus:ring-purple-500
-                         dark:bg-gray-700 dark:text-white"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
             />
           </div>
 
@@ -87,9 +87,9 @@ export default function CategoryForm({ category, onSubmit, onCancel }: Props) {
               name="marginPercentage"
               value={form.marginPercentage ?? ""}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                         focus:border-purple-500 focus:ring-purple-500
-                         dark:bg-gray-700 dark:text-white h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
               min={0}
               max={100}
               step={0.1}

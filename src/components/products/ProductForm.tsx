@@ -17,7 +17,9 @@ interface ProductFormData {
 interface Props {
   product?: Product;
   categories?: { id: number; name: string }[];
-  onSubmit: (data: ProductFormData) => void;
+  onSubmit: (
+    data: Omit<Product, "id"> & { categoryId: number; initialStock?: number },
+  ) => void;
   onCancel: () => void;
 }
 
@@ -70,19 +72,25 @@ export default function ProductForm({
 
     const normalizedForm = {
       ...form,
-      purchasePrice: form.purchasePrice === "" ? 0 : form.purchasePrice,
-      salePrice: form.salePrice === "" ? 0 : form.salePrice,
-      minStock: form.minStock === "" ? 0 : form.minStock,
-      initialStock: form.initialStock === "" ? 0 : form.initialStock,
+      purchasePrice: form.purchasePrice === "" ? 0 : Number(form.purchasePrice),
+      salePrice: form.salePrice === "" ? 0 : Number(form.salePrice),
+      minStock: form.minStock === "" ? 0 : Number(form.minStock),
+      initialStock: form.initialStock === "" ? 0 : Number(form.initialStock),
+      categoryId: Number(form.categoryId),
     };
 
-    onSubmit(normalizedForm);
+    onSubmit(
+      normalizedForm as Omit<Product, "id"> & {
+        categoryId: number;
+        initialStock?: number;
+      },
+    );
   };
 
   return (
     <Card title={product ? "Editar producto" : "Nuevo producto"}>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 ">
           {/* Código de barras */}
           <div>
             <label className="block text-lg text-gray-900 dark:text-gray-700">
@@ -93,9 +101,9 @@ export default function ProductForm({
               name="barcode"
               value={form.barcode}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                         focus:border-purple-500 focus:ring-purple-500
-                         dark:bg-gray-700 dark:text-white h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
             />
           </div>
 
@@ -109,9 +117,9 @@ export default function ProductForm({
               name="name"
               value={form.name}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                         focus:border-purple-500 focus:ring-purple-500
-                         dark:bg-gray-700 dark:text-white h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
               required
             />
           </div>
@@ -125,9 +133,9 @@ export default function ProductForm({
               name="description"
               value={form.description}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                         focus:border-purple-500 focus:ring-purple-500
-                         dark:bg-gray-700 dark:text-white h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
             />
           </div>
 
@@ -142,9 +150,9 @@ export default function ProductForm({
                 name="purchasePrice"
                 value={form.purchasePrice}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                           focus:border-purple-500 focus:ring-purple-500
-                           dark:bg-gray-700 dark:text-white h-10"
+                className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
                 min={0}
                 step={0.01}
               />
@@ -158,9 +166,9 @@ export default function ProductForm({
                 name="salePrice"
                 value={form.salePrice}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                           focus:border-purple-500 focus:ring-purple-500
-                           dark:bg-gray-700 dark:text-white h-10"
+                className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
                 min={0}
                 step={0.01}
               />
@@ -178,9 +186,9 @@ export default function ProductForm({
                 name="minStock"
                 value={form.minStock}
                 onChange={handleChange}
-                className="mt-1 block w-full rounded-xl border-gray-300 dark:border-gray-600 shadow-lg
-                           focus:border-purple-500 focus:ring-purple-500
-                           dark:bg-gray-700 dark:text-white h-10"
+                className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
               />
             </div>
             {!product && (
@@ -193,9 +201,9 @@ export default function ProductForm({
                   name="initialStock"
                   value={form.initialStock}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                             focus:border-purple-500 focus:ring-purple-500
-                             dark:bg-gray-700 dark:text-white h-10"
+                  className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
                   min={0}
                 />
               </div>
@@ -211,9 +219,9 @@ export default function ProductForm({
               name="categoryId"
               value={form.categoryId}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-gray-300 dark:border-gray-600 shadow-lg
-                         focus:border-purple-500 focus:ring-purple-500
-                         dark:bg-gray-700 dark:text-white h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500
+             dark:bg-gray-200 dark:text-gray-700 h-10"
               required
             >
               <option value={0}>Seleccionar categoría</option>

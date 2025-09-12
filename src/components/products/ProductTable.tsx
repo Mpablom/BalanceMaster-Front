@@ -56,10 +56,10 @@ export default function ProductTable({ products, onEdit, onDelete }: Props) {
       </div>
 
       {/* Desktop: tabla */}
-      <div className="hidden sm:block overflow-x-auto">
-        <table className="w-full text-left border-collapse rounded-lg shadow-lg">
+      <div className="hidden sm:block overflow-x-auto rounded-xl">
+        <table className="w-full text-left border-collapse rounded-lg shadow-2xl">
           <thead>
-            <tr className="bg-purple-600 text-white">
+            <tr className="bg-purple-900 text-white">
               <th className="p-2">Nombre</th>
               <th className="p-2">Código</th>
               <th className="p-2">Precio Compra</th>
@@ -76,7 +76,7 @@ export default function ProductTable({ products, onEdit, onDelete }: Props) {
                 key={p.id}
                 className={`${
                   p.inventory?.quantity === p.minStock ? "text-red-600" : ""
-                } bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700`}
+                } bg-[#f1f1f1]  hover:bg-gray-300 text-gray-900`}
               >
                 <td className="p-2">{p.name}</td>
                 <td className="p-2">{p.barcode ?? "-"}</td>

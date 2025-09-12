@@ -4,7 +4,7 @@ import { Home, Box, Tags, Menu } from "lucide-react";
 import { useState } from "react";
 
 interface SidebarProps {
-  open: boolean; // sidebar en móviles
+  open: boolean;
   setOpen: (open: boolean) => void;
 }
 
@@ -29,15 +29,15 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`fixed md:static z-50 h-screen bg-[#1e1b2e] text-[#f3f4f6] flex flex-col p-4
+        className={`fixed md:static z-50 h-screen bg-[#f1f1f1] text-[#3e3e3e] flex flex-col p-4
     transition-all duration-300
     ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0
-    ${collapsed ? "md:w-20" : "md:w-64"} w-64`}
+    ${collapsed ? "md:w-20" : "md:w-64"} w-64}`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex  justify-between mb-6">
           {!collapsed && (
-            <h2 className="text-xl font-bold text-[#a78bfa]">Balance Master</h2>
+            <h2 className="text-xl font-bold text-[#5a5a5a]">Balance Master</h2>
           )}
           <button
             className="text-gray-400 hover:text-purple-400 md:hidden"
@@ -46,7 +46,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
             X
           </button>
           <button
-            className="text-gray-400 hover:text-purple-400 hidden md:flex items-center justify-center ml-2"
+            className="text-gray-400 hover:text-purple-400 hidden md:flex items-center justify-center ml-4 mt-1"
             onClick={() => setCollapsed(!collapsed)}
           >
             <Menu className="w-5 h-5" />
@@ -54,11 +54,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
         </div>
 
         {/* Nav */}
-        <nav className="flex flex-col space-y-2">
+        <nav className="flex flex-col space-y-3 pt-8 ml-2 mt-2">
           {links.map((link) => {
             const Icon = link.icon;
             return collapsed ? (
-              // Sidebar colapsado: solo icono + tooltip
               <Tooltip.Root key={link.to}>
                 <Tooltip.Trigger asChild>
                   <NavLink
@@ -72,7 +71,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
                     {({ isActive }) => (
                       <Icon
                         className={`w-5 h-5 ${
-                          isActive ? "text-purple-400" : "text-gray-400"
+                          isActive ? "text-purple-600" : "text-gray-500"
                         }`}
                       />
                     )}
@@ -95,7 +94,9 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
                 to={link.to}
                 className={({ isActive }) =>
                   `flex items-center gap-2 rounded-lg px-3 py-2 transition hover:bg-[#2a223d] ${
-                    isActive ? "bg-[#2a223d]" : ""
+                    isActive
+                      ? "bg-[#2a223d]text-purple-600 font-bold hover:text-gray-500"
+                      : "text-gray-400 font-bold"
                   }`
                 }
               >
@@ -103,7 +104,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
                   <>
                     <Icon
                       className={`w-5 h-5 ${
-                        isActive ? "text-purple-400" : "text-gray-400"
+                        isActive ? "text-purple-600" : "text-gray-500"
                       }`}
                     />
                     {link.name}

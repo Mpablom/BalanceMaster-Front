@@ -22,7 +22,7 @@ import {
 } from "recharts";
 import { useEffect } from "react";
 
-const COLORS = ["#7e22ce", "#a855f7", "#c084fc", "#e879f9"];
+const COLORS = ["#6366F1", "#10B981", "#F59E0B", "#F43F5E"];
 
 export default function Dashboard() {
   const { items: lowStockItems } = useLowStock();
@@ -67,7 +67,10 @@ export default function Dashboard() {
     })) || [];
 
   return (
-    <div className="space-y-6">
+    <div
+      className="space-y-6 px-4 py-6 bg-transparent min-h-screen
+"
+    >
       {/*  Bienvenida */}
       <div>
         <h1 className="text-2xl font-bold">Bienvenido 👋</h1>
@@ -87,7 +90,7 @@ export default function Dashboard() {
       {/* KPIs */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Card className="p-4">
-          <h3 className="text-gray-600 text-lg font-semibold mb-2">
+          <h3 className="text-slate-600 text-lg font-semibold mb-2">
             💰 Ventas del mes
           </h3>
           <CardContent className="text-green-500 text-2xl font-bold">
@@ -96,7 +99,7 @@ export default function Dashboard() {
         </Card>
 
         <Card className="p-4">
-          <h3 className="text-gray-600 text-lg font-semibold mb-2">
+          <h3 className="text-slate-600 text-lg font-semibold mb-2">
             🛒 Compras del mes
           </h3>
           <CardContent className="text-blue-500 text-2xl font-bold">
@@ -105,7 +108,7 @@ export default function Dashboard() {
         </Card>
 
         <Card className="p-4">
-          <h3 className="text-gray-600 text-lg font-semibold mb-2">
+          <h3 className="text-slate-600 text-lg font-semibold mb-2">
             ⚠️ Productos críticos
           </h3>
           <CardContent className="text-red-500 text-2xl font-bold">
@@ -118,7 +121,7 @@ export default function Dashboard() {
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Ventas vs Compras */}
         <Card className="p-4">
-          <h3 className="text-purple-400 text-lg font-semibold mb-4">
+          <h3 className="text-center text-slate-600 text-lg font-semibold mb-4">
             Ventas y Compras
           </h3>
           <CardContent>
@@ -129,8 +132,8 @@ export default function Dashboard() {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="ventas" fill="#7e22ce" />
-                <Bar dataKey="compras" fill="#a855f7" />
+                <Bar dataKey="ventas" fill="#10B981" />
+                <Bar dataKey="compras" fill="#6366F1" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -139,7 +142,7 @@ export default function Dashboard() {
         {/* Stock por categoría */}
 
         <Card className="p-4">
-          <h3 className="text-purple-400 text-lg font-semibold mb-4">
+          <h3 className="text-center text-slate-600 text-lg font-semibold mb-4">
             Stock por categoría
           </h3>
           <CardContent>

@@ -49,13 +49,20 @@ export default function CategoriesPage() {
   if (loading) return <p className="text-center mt-8">Cargando...</p>;
 
   return (
-    <div className="rounded-lg p-4 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="rounded-lg px-4 py-6 min-h-screen bg-transparent">
       <header className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold text-purple-700 dark:text-purple-400">
           Categorías
         </h1>
+        {!showForm && (
+          <button
+            onClick={handleAdd}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+          >
+            + Nueva categoría
+          </button>
+        )}
       </header>
-
       {showForm ? (
         <CategoryForm
           category={editingCategory ?? undefined}
@@ -63,19 +70,11 @@ export default function CategoriesPage() {
           onCancel={handleCancel}
         />
       ) : (
-        <>
-          <button
-            onClick={handleAdd}
-            className="mb-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
-          >
-            + Nueva categoría
-          </button>
-          <CategoryTable
-            categories={categories}
-            onEdit={handleEdit}
-            onDelete={removeCategory}
-          />
-        </>
+        <CategoryTable
+          categories={categories}
+          onEdit={handleEdit}
+          onDelete={removeCategory}
+        />
       )}
     </div>
   );

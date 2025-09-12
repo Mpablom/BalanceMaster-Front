@@ -6,7 +6,7 @@ interface HeaderProps {
 
 export default function Header({ onMenuClick }: HeaderProps) {
   return (
-    <header className="flex items-center justify-between p-4 bg-[#1e1b2e] text-white shadow-md">
+    <header className="flex items-center justify-between p-4 bg-[#f1f1f1] shadow-2xl">
       {/* Botón hamburguesa solo en mobile */}
       {onMenuClick && (
         <button
@@ -17,8 +17,10 @@ export default function Header({ onMenuClick }: HeaderProps) {
         </button>
       )}
 
-      <h1 className="text-lg font-semibold">Balance Master POS</h1>
-      <button className="bg-purple-500 text-white px-4 py-1 rounded hover:bg-purple-600">
+      <h1 className="text-lg font-bold ml-4 text-gray-700">
+        Balance Master POS
+      </h1>
+      <button className="bg-purple-600 text-white px-4 py-1 rounded hover:bg-purple-700">
         Logout
       </button>
     </header>
