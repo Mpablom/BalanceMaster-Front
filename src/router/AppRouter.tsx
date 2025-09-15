@@ -3,6 +3,7 @@ import AdminLayout from "../components/layouts/AdminLayout";
 import Dashboard from "../pages/Dashboard";
 import ProductsPage from "../pages/ProductsPage";
 import CategoriesPage from "../pages/CategoriesPage";
+import CustomersPage from "../pages/CustomersPage";
 
 export default function AppRouter() {
   return (
@@ -12,6 +13,7 @@ export default function AppRouter() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="products" element={<ProductsPage />} />
         <Route path="categories" element={<CategoriesPage />} />
+        <Route path="customers" element={<CustomersPage />} />
       </Route>
     </Routes>
   );

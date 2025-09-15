@@ -1,6 +1,6 @@
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { NavLink } from "react-router-dom";
-import { Home, Box, Tags, Menu } from "lucide-react";
+import { Home, Box, Tags, Menu, Users } from "lucide-react";
 import { useState } from "react";
 
 interface SidebarProps {
@@ -12,6 +12,7 @@ const links = [
   { name: "Dashboard", to: "/dashboard", icon: Home },
   { name: "Productos", to: "/products", icon: Box },
   { name: "Categorías", to: "/categories", icon: Tags },
+  { name: "Clientes", to: "/customers", icon: Users },
 ];
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
