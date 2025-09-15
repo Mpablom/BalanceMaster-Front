@@ -122,7 +122,7 @@ export default function Dashboard() {
         {/* Ventas vs Compras */}
         <Card className="p-4">
           <h3 className="text-center text-slate-600 text-lg font-semibold mb-4">
-            Ventas y Compras
+            Compras y ventas semanales
           </h3>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>

@@ -78,7 +78,7 @@ export default function ProductTable({ products, onEdit, onDelete }: Props) {
                   p.inventory?.quantity === p.minStock ? "text-red-600" : ""
                 } bg-[#f1f1f1]  hover:bg-gray-300 text-gray-900`}
               >
-                <td className="p-2">{p.name}</td>
+                <td className="p-2 font-semibold">{p.name}</td>
                 <td className="p-2">{p.barcode ?? "-"}</td>
                 <td className="p-2">${p.purchasePrice}</td>
                 <td className="p-2">${p.salePrice}</td>
