@@ -1,6 +1,6 @@
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { NavLink } from "react-router-dom";
-import { Home, Box, Tags, Menu, Users } from "lucide-react";
+import { Home, Box, Tags, Menu, Users, Truck } from "lucide-react";
 import { useState } from "react";
 
 interface SidebarProps {
@@ -13,6 +13,7 @@ const links = [
   { name: "Productos", to: "/products", icon: Box },
   { name: "Categorías", to: "/categories", icon: Tags },
   { name: "Clientes", to: "/customers", icon: Users },
+  { name: "Proveedores", to: "/suppliers", icon: Truck },
 ];
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
@@ -96,7 +97,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
                 className={({ isActive }) =>
                   `flex items-center gap-2 rounded-lg px-3 py-2 transition hover:bg-[#2a223d] ${
                     isActive
-                      ? "bg-[#2a223d]text-purple-600 font-bold hover:text-gray-500"
+                      ? "bg-[#2a223d] text-purple-600 font-bold hover:text-gray-500"
                       : "text-gray-400 font-bold"
                   }`
                 }
