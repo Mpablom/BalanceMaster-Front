@@ -1,4 +1,3 @@
-import { Edit, Trash } from "lucide-react";
 import type { Supplier } from "../../types/supplier";
 
 interface SupplierTableProps {
@@ -13,54 +12,78 @@ export default function SupplierTable({
   onDelete,
 }: SupplierTableProps) {
   return (
-    <div className="overflow-x-auto bg-white shadow-md rounded-lg">
-      <table className="w-full text-left border-collapse">
-        <thead className="bg-purple-600 text-white">
-          <tr>
-            <th className="px-4 py-2">Nombre</th>
-            <th className="px-4 py-2">Teléfono</th>
-            <th className="px-4 py-2">Email</th>
-            <th className="px-4 py-2 text-center">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {suppliers.length > 0 ? (
-            suppliers.map((supplier) => (
-              <tr
-                key={supplier.id}
-                className="border-b hover:bg-gray-50 transition"
+    <>
+      {/* Mobile: cards */}
+      <div className="sm:hidden space-y-4">
+        {suppliers.map((s) => (
+          <div
+            key={s.id}
+            className="bg-[#f1f1f1] rounded-xl p-4 shadow-md flex flex-col"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-semibold text-lg">{s.name}</h3>
+              <span className="text-sm text-gray-500">{s.phone ?? "-"}</span>
+            </div>
+            <div className="text-sm space-y-1">
+              <p>Email: {s.email ?? "-"}</p>
+            </div>
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={() => onEdit(s)}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
               >
-                <td className="px-4 py-2 font-medium">{supplier.name}</td>
-                <td className="px-4 py-2">{supplier.phone ?? "-"}</td>
-                <td className="px-4 py-2">{supplier.email ?? "-"}</td>
-                <td className="px-4 py-2 flex justify-center gap-2">
+                Editar
+              </button>
+              <button
+                onClick={() => onDelete(s.id)}
+                className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: tabla */}
+      <div className="hidden sm:block overflow-x-auto rounded-xl">
+        <table className="w-full text-left border-collapse rounded-lg shadow-2xl">
+          <thead>
+            <tr className="bg-purple-900 text-white">
+              <th className="p-2">Nombre</th>
+              <th className="p-2">Teléfono</th>
+              <th className="p-2">Email</th>
+              <th className="p-2">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {suppliers.map((s) => (
+              <tr
+                key={s.id}
+                className="bg-[#f1f1f1] hover:bg-gray-300 text-gray-900"
+              >
+                <td className="p-2 font-semibold">{s.name}</td>
+                <td className="p-2">{s.phone ?? "-"}</td>
+                <td className="p-2">{s.email ?? "-"}</td>
+                <td className="p-2 space-x-2">
                   <button
-                    onClick={() => onEdit(supplier)}
-                    className="p-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition"
+                    onClick={() => onEdit(s)}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
                   >
-                    <Edit className="w-4 h-4" />
+                    Editar
                   </button>
                   <button
-                    onClick={() => onDelete(supplier.id)}
-                    className="p-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
+                    onClick={() => onDelete(s.id)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
                   >
-                    <Trash className="w-4 h-4" />
+                    Eliminar
                   </button>
                 </td>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td
-                colSpan={4}
-                className="px-4 py-6 text-center text-gray-500 italic"
-              >
-                No hay proveedores registrados.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }

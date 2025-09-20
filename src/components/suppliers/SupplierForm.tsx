@@ -1,23 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "../ui/card";
 import type { Supplier } from "../../types/supplier";
 
-interface Props {
+interface SupplierFormProps {
   supplier?: Supplier;
   onSubmit: (data: Omit<Supplier, "id">) => void;
   onCancel: () => void;
 }
 
-export default function SupplierForm({ supplier, onSubmit, onCancel }: Props) {
+export default function SupplierForm({
+  supplier,
+  onSubmit,
+  onCancel,
+}: SupplierFormProps) {
   const [form, setForm] = useState<Omit<Supplier, "id">>({
-    name: supplier?.name ?? "",
-    phone: supplier?.phone ?? "",
-    email: supplier?.email ?? "",
+    name: "",
+    phone: "",
+    email: "",
   });
+
+  useEffect(() => {
+    if (supplier) {
+      setForm({
+        name: supplier.name ?? "",
+        phone: supplier.phone ?? "",
+        email: supplier.email ?? "",
+      });
+    }
+  }, [supplier]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,6 +50,7 @@ export default function SupplierForm({ supplier, onSubmit, onCancel }: Props) {
     <Card title={supplier ? "Editar proveedor" : "Nuevo proveedor"}>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Nombre */}
           <div>
             <label className="block text-gray-900 dark:text-gray-700 font-semibold">
               Nombre
@@ -42,11 +60,13 @@ export default function SupplierForm({ supplier, onSubmit, onCancel }: Props) {
               name="name"
               value={form.name}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+                         focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
               required
             />
           </div>
 
+          {/* Teléfono */}
           <div>
             <label className="block text-gray-900 dark:text-gray-700 font-semibold">
               Teléfono
@@ -56,10 +76,12 @@ export default function SupplierForm({ supplier, onSubmit, onCancel }: Props) {
               name="phone"
               value={form.phone}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+                         focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
             />
           </div>
 
+          {/* Email */}
           <div>
             <label className="block text-gray-900 dark:text-gray-700 font-semibold">
               Email
@@ -69,10 +91,12 @@ export default function SupplierForm({ supplier, onSubmit, onCancel }: Props) {
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+                         focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
             />
           </div>
 
+          {/* Botones */}
           <div className="flex justify-end gap-2">
             <button
               type="submit"
@@ -83,7 +107,8 @@ export default function SupplierForm({ supplier, onSubmit, onCancel }: Props) {
             <button
               type="button"
               onClick={onCancel}
-              className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white px-4 py-2 rounded shadow"
+              className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-700 dark:hover:bg-gray-600
+                         text-gray-900 dark:text-white px-4 py-2 rounded shadow"
             >
               Cancelar
             </button>

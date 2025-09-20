@@ -65,7 +65,7 @@ export default function SuppliersPage() {
 
       {showForm ? (
         <SupplierForm
-          initialData={editingSupplier ?? undefined}
+          supplier={editingSupplier ?? undefined}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
         />

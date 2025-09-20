@@ -12,7 +12,7 @@ export function useCustomers() {
     try {
       const res = await fetch(API_URL);
       const data = await res.json();
-      setCustomers(data.content ?? data); // soporta paginado o array directo
+      setCustomers(data.content ?? data);
     } catch (err) {
       console.error("Error cargando clientes", err);
     } finally {
