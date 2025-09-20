@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Customer } from "../types/customer";
+import axios from "axios";
 
 const API_URL = "http://localhost:8080/api/customers";
 
@@ -10,52 +11,52 @@ export function useCustomers() {
   const fetchCustomers = async () => {
     setLoading(true);
     try {
-      const res = await fetch(API_URL);
-      const data = await res.json();
-      setCustomers(data.content ?? data);
+      const res = await axios.get(API_URL);
+      const list: Customer[] = Array.isArray(res.data)
+        ? res.data
+        : (res.data.content ?? []);
+      setCustomers(list);
     } catch (err) {
       console.error("Error cargando clientes", err);
+      setCustomers([]);
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
   const addCustomer = async (customer: Omit<Customer, "id">) => {
     try {
-      const res = await fetch(API_URL, {
-        method: "POST",
+      await axios.post(API_URL, customer, {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customer),
       });
-      if (!res.ok) throw new Error("Error al crear cliente");
       await fetchCustomers();
     } catch (err) {
-      console.error(err);
+      console.error("Error al crear cliente", err);
     }
   };
 
   const editCustomer = async (id: number, customer: Omit<Customer, "id">) => {
     try {
-      const res = await fetch(`${API_URL}/${id}`, {
-        method: "PUT",
+      await axios.put(`${API_URL}/${id}`, customer, {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(customer),
       });
-      if (!res.ok) throw new Error("Error al editar cliente");
       await fetchCustomers();
     } catch (err) {
-      console.error(err);
+      console.error("Error al editar cliente", err);
     }
   };
 
   const removeCustomer = async (id: number) => {
     if (!confirm("¿Seguro que deseas eliminar este cliente?")) return;
     try {
-      const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Error al eliminar cliente");
+      await axios.delete(`${API_URL}/${id}`);
       setCustomers((prev) => prev.filter((c) => c.id !== id));
     } catch (err) {
-      console.error(err);
+      console.error("Error al eliminar cliente", err);
     }
   };
 

@@ -14,6 +14,8 @@ const links = [
   { name: "Categorías", to: "/categories", icon: Tags },
   { name: "Clientes", to: "/customers", icon: Users },
   { name: "Proveedores", to: "/suppliers", icon: Truck },
+  { name: "Cuentas Clientes", to: "/customer-accounts", icon: Users },
+  { name: "Cuentas Proveedores", to: "/supplier-accounts", icon: Truck },
 ];
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
