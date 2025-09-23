@@ -6,6 +6,7 @@ import { Card, CardContent } from "../ui/card";
 interface Props {
   account?: CustomerAccount;
   customers: Customer[];
+  loadingCustomers: boolean;
   onSubmit: (data: Omit<CustomerAccount, "id">) => Promise<void>;
   onCancel: () => void;
 }
@@ -13,37 +14,43 @@ interface Props {
 export default function CustomerAccountForm({
   account,
   customers,
+  loadingCustomers,
   onSubmit,
   onCancel,
 }: Props) {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<Omit<CustomerAccount, "id">>({
     customerId: account?.customerId ?? 0,
     balance: account?.balance ?? 0,
-    dueDate: account?.dueDate ?? "",
     creditLimit: account?.creditLimit ?? 0,
+    dueDate: account?.dueDate ?? "",
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: name === "customerId" ? Number(value) : Number(value),
+      [name]:
+        name === "balance" || name === "creditLimit"
+          ? parseFloat(value)
+          : value,
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (form.customerId === 0) {
-      alert("Debe seleccionar un cliente");
+      alert("Debes seleccionar un cliente válido");
       return;
     }
-    onSubmit(form);
+    await onSubmit(form);
   };
 
   return (
-    <Card title={account ? "Editar cuenta" : "Nueva cuenta"}>
+    <Card
+      title={account ? "Editar cuenta de cliente" : "Nueva cuenta de cliente"}
+    >
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -54,16 +61,25 @@ export default function CustomerAccountForm({
               name="customerId"
               value={form.customerId}
               onChange={handleChange}
+              disabled={loadingCustomers}
               className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
                          focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
               required
             >
-              <option value={0}>Seleccionar cliente</option>
-              {customers.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
+              <option value={0}>
+                {loadingCustomers
+                  ? "Cargando clientes..."
+                  : "Seleccionar cliente"}
+              </option>
+              {customers.length === 0 && !loadingCustomers ? (
+                <option disabled>No hay clientes disponibles</option>
+              ) : (
+                customers.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
@@ -83,12 +99,12 @@ export default function CustomerAccountForm({
 
           <div>
             <label className="block text-gray-900 dark:text-gray-700 font-semibold">
-              Vencimiento
+              Límite de crédito
             </label>
             <input
-              type="date"
-              name="dueDate"
-              value={form.dueDate}
+              type="number"
+              name="creditLimit"
+              value={form.creditLimit}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
                          focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
@@ -97,12 +113,12 @@ export default function CustomerAccountForm({
 
           <div>
             <label className="block text-gray-900 dark:text-gray-700 font-semibold">
-              Límite de crédito
+              Fecha de vencimiento
             </label>
             <input
-              type="number"
-              name="creditLimit"
-              value={form.creditLimit}
+              type="date"
+              name="dueDate"
+              value={form.dueDate}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
                          focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
