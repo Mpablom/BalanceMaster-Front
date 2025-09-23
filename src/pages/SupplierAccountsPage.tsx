@@ -14,6 +14,7 @@ export default function SupplierAccountsPage() {
     removeAccount,
     loading,
   } = useSupplierAccounts();
+
   const { suppliers, loading: loadingSuppliers } = useSuppliers();
 
   const [showForm, setShowForm] = useState(false);
@@ -61,17 +62,23 @@ export default function SupplierAccountsPage() {
         {!showForm && (
           <button
             onClick={handleAdd}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded disabled:opacity-50"
+            disabled={suppliers.length === 0}
           >
             + Nueva Cuenta
           </button>
         )}
       </header>
 
-      {showForm ? (
+      {suppliers.length === 0 ? (
+        <p className="text-gray-500">
+          No hay proveedores disponibles. Agrega un proveedor primero.
+        </p>
+      ) : showForm ? (
         <SupplierAccountForm
           account={editingAccount ?? undefined}
           suppliers={suppliers}
+          loadingSuppliers={loadingSuppliers}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
         />

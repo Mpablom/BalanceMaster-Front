@@ -14,6 +14,7 @@ export default function CustomerAccountPage() {
     removeAccount,
     loading,
   } = useCustomerAccounts();
+
   const { customers, loading: loadingCustomers } = useCustomers();
 
   const [showForm, setShowForm] = useState(false);
@@ -61,17 +62,23 @@ export default function CustomerAccountPage() {
         {!showForm && (
           <button
             onClick={handleAdd}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded disabled:opacity-50"
+            disabled={customers.length === 0}
           >
             + Nueva Cuenta
           </button>
         )}
       </header>
 
-      {showForm ? (
+      {customers.length === 0 ? (
+        <p className="text-gray-500">
+          No hay clientes disponibles. Agrega un cliente primero.
+        </p>
+      ) : showForm ? (
         <CustomerAccountForm
           account={editingAccount ?? undefined}
           customers={customers}
+          loadingCustomers={loadingCustomers}
           onSubmit={handleSubmit}
           onCancel={handleCancel}
         />
