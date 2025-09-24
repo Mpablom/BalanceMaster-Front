@@ -2,20 +2,23 @@ import { useState, useEffect } from "react";
 import CustomerAccountForm from "../components/customerAccounts/CustomerAccountForm";
 import CustomerAccountTable from "../components/customerAccounts/CustomerAccountTable";
 import { useCustomerAccounts } from "../hooks/useCustomerAccounts";
-import type { CustomerAccount } from "../types/customerAccount";
 import { useCustomers } from "../hooks/useCustomers";
+import type { CustomerAccount } from "../types/customerAccount";
 
 export default function CustomerAccountPage() {
   const {
     accounts,
+    loading,
     fetchAccounts,
     addAccount,
     updateAccount,
     removeAccount,
-    loading,
   } = useCustomerAccounts();
-
-  const { customers, loading: loadingCustomers } = useCustomers();
+  const {
+    customers,
+    loading: loadingCustomers,
+    fetchCustomers,
+  } = useCustomers();
 
   const [showForm, setShowForm] = useState(false);
   const [editingAccount, setEditingAccount] = useState<CustomerAccount | null>(
@@ -24,29 +27,25 @@ export default function CustomerAccountPage() {
 
   useEffect(() => {
     fetchAccounts();
+    fetchCustomers();
   }, []);
 
   const handleAdd = () => {
     setEditingAccount(null);
     setShowForm(true);
   };
-
   const handleEdit = (account: CustomerAccount) => {
     setEditingAccount(account);
     setShowForm(true);
   };
-
-  const handleSubmit = async (data: Omit<CustomerAccount, "id">) => {
-    if (editingAccount) {
-      await updateAccount(editingAccount.id, data);
-    } else {
-      await addAccount(data);
-    }
+  const handleCancel = () => {
     setShowForm(false);
     setEditingAccount(null);
   };
 
-  const handleCancel = () => {
+  const handleSubmit = async (data: Omit<CustomerAccount, "id">) => {
+    if (editingAccount) await updateAccount(editingAccount.id, data);
+    else await addAccount(data);
     setShowForm(false);
     setEditingAccount(null);
   };
@@ -62,19 +61,14 @@ export default function CustomerAccountPage() {
         {!showForm && (
           <button
             onClick={handleAdd}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded disabled:opacity-50"
-            disabled={customers.length === 0}
+            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded"
           >
             + Nueva Cuenta
           </button>
         )}
       </header>
 
-      {customers.length === 0 ? (
-        <p className="text-gray-500">
-          No hay clientes disponibles. Agrega un cliente primero.
-        </p>
-      ) : showForm ? (
+      {showForm ? (
         <CustomerAccountForm
           account={editingAccount ?? undefined}
           customers={customers}

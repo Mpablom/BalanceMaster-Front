@@ -28,7 +28,7 @@ export default function SupplierAccountTable({
             >
               <div className="flex justify-between items-center mb-2">
                 <span className="font-bold text-purple-700 dark:text-purple-800">
-                  {supplier?.name}
+                  {supplier?.name ?? "-"}
                 </span>
               </div>
               <div className="text-sm space-y-1">
@@ -69,7 +69,7 @@ export default function SupplierAccountTable({
                   key={acc.id}
                   className="bg-[#f1f1f1] hover:bg-gray-300 text-gray-900"
                 >
-                  <td className="p-2 font-semibold">{supplier?.name}</td>
+                  <td className="p-2 font-semibold">{supplier?.name ?? "-"}</td>
                   <td className="p-2">{acc.balance}</td>
                   <td className="p-2 space-x-2">
                     <Button size="sm" onClick={() => onEdit(acc)}>
