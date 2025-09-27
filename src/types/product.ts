@@ -11,7 +11,7 @@ export interface Category {
   marginPercentage?: number;
 }
 
-export interface Product {
+export interface ProductResponseDTO {
   id: number;
   barcode?: string | null;
   name: string;
@@ -19,7 +19,17 @@ export interface Product {
   purchasePrice: number;
   salePrice: number;
   minStock: number;
-  deleted: boolean;
+  deleted?: boolean;
   inventory?: Inventory;
   category?: Category;
+}
+
+export interface ProductRequestDTO {
+  barcode?: string | null;
+  name: string;
+  description?: string | null;
+  purchasePrice: number;
+  minStock: number;
+  initialStock?: number;
+  categoryId?: number;
 }

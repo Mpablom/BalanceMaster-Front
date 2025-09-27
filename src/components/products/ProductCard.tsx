@@ -1,8 +1,8 @@
 import { Card, CardContent } from "../ui/card";
-import type { Product } from "../../types/product";
+import type { ProductResponseDTO } from "../../types/product";
 
 interface Props {
-  product: Product;
+  product: ProductResponseDTO;
 }
 
 export default function ProductCard({ product }: Props) {

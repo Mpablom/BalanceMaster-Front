@@ -9,10 +9,10 @@ interface Props {
 }
 
 export default function CustomerForm({ customer, onSubmit, onCancel }: Props) {
-  const [form, setForm] = useState<Omit<Customer, "id">>({
+  const [form, setForm] = useState({
     name: customer?.name ?? "",
     contactInfo: customer?.contactInfo ?? "",
-    creditLimit: customer?.creditLimit ?? 0,
+    creditLimit: customer?.creditLimit?.toString() ?? "",
   });
 
   const handleChange = (
@@ -21,7 +21,7 @@ export default function CustomerForm({ customer, onSubmit, onCancel }: Props) {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: name === "creditLimit" ? Number(value) : value,
+      [name]: value,
     }));
   };
 
@@ -31,7 +31,10 @@ export default function CustomerForm({ customer, onSubmit, onCancel }: Props) {
       alert("El nombre es obligatorio");
       return;
     }
-    onSubmit(form);
+    onSubmit({
+      ...form,
+      creditLimit: Number(form.creditLimit),
+    });
   };
 
   return (

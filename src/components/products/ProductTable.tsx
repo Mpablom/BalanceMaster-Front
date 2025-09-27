@@ -1,8 +1,8 @@
-import type { Product } from "../../types/product";
+import type { ProductResponseDTO } from "../../types/product";
 
 interface Props {
-  products: Product[];
-  onEdit: (p: Product) => void;
+  products: ProductResponseDTO[];
+  onEdit: (p: ProductResponseDTO) => void;
   onDelete: (id: number) => void;
 }
 
@@ -22,7 +22,8 @@ export default function ProductTable({ products, onEdit, onDelete }: Props) {
               </span>
               <span
                 className={`text-sm font-semibold ${
-                  p.inventory?.quantity === p.minStock
+                  p.inventory?.quantity !== undefined &&
+                  p.inventory?.quantity <= p.minStock
                     ? "text-red-600"
                     : "text-gray-500 dark:text-gray-400"
                 }`}
@@ -75,8 +76,11 @@ export default function ProductTable({ products, onEdit, onDelete }: Props) {
               <tr
                 key={p.id}
                 className={`${
-                  p.inventory?.quantity === p.minStock ? "text-red-600" : ""
-                } bg-[#f1f1f1]  hover:bg-gray-300 text-gray-900`}
+                  p.inventory?.quantity !== undefined &&
+                  p.inventory?.quantity <= p.minStock
+                    ? "text-red-600"
+                    : ""
+                } bg-[#f1f1f1] hover:bg-gray-300 text-gray-900`}
               >
                 <td className="p-2 font-semibold">{p.name}</td>
                 <td className="p-2">{p.barcode ?? "-"}</td>

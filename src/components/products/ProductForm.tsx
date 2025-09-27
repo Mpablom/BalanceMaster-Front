@@ -1,25 +1,14 @@
 import { useState } from "react";
-import type { Product } from "../../types/product";
+import type {
+  ProductRequestDTO,
+  ProductResponseDTO,
+} from "../../types/product";
 import { Card, CardContent } from "../ui/card";
 
-interface ProductFormData {
-  barcode: string;
-  name: string;
-  description: string;
-  purchasePrice: number | "";
-  salePrice: number | "";
-  minStock: number | "";
-  initialStock: number | "";
-  categoryId: number | "";
-  deleted: boolean;
-}
-
 interface Props {
-  product?: Product;
+  product?: ProductResponseDTO;
   categories?: { id: number; name: string }[];
-  onSubmit: (
-    data: Omit<Product, "id"> & { categoryId: number; initialStock?: number },
-  ) => void;
+  onSubmit: (data: ProductRequestDTO) => void;
   onCancel: () => void;
 }
 
@@ -29,16 +18,14 @@ export default function ProductForm({
   onSubmit,
   onCancel,
 }: Props) {
-  const [form, setForm] = useState<ProductFormData>({
+  const [form, setForm] = useState({
     barcode: product?.barcode ?? "",
     name: product?.name ?? "",
     description: product?.description ?? "",
-    purchasePrice: product?.purchasePrice ?? "",
-    salePrice: product?.salePrice ?? "",
-    minStock: product?.minStock ?? "",
-    initialStock: product?.inventory?.quantity ?? "",
-    categoryId: product?.category?.id ?? 0,
-    deleted: product?.deleted ?? false,
+    purchasePrice: product?.purchasePrice?.toString() ?? "",
+    minStock: product?.minStock?.toString() ?? "",
+    initialStock: product?.inventory?.quantity.toString() ?? "",
+    categoryId: product?.category?.id?.toString() ?? "0",
   });
 
   const handleChange = (
@@ -50,47 +37,34 @@ export default function ProductForm({
 
     setForm((prev) => ({
       ...prev,
-      [name]:
-        name === "purchasePrice" ||
-        name === "salePrice" ||
-        name === "minStock" ||
-        name === "initialStock" ||
-        name === "categoryId"
-          ? value === ""
-            ? ""
-            : Number(value)
-          : value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.categoryId === 0) {
+
+    if (form.categoryId === "0") {
       alert("Debe seleccionar una categoría");
       return;
     }
 
-    const normalizedForm = {
-      ...form,
-      purchasePrice: form.purchasePrice === "" ? 0 : Number(form.purchasePrice),
-      salePrice: form.salePrice === "" ? 0 : Number(form.salePrice),
-      minStock: form.minStock === "" ? 0 : Number(form.minStock),
-      initialStock: form.initialStock === "" ? 0 : Number(form.initialStock),
+    const dto: ProductRequestDTO = {
+      barcode: form.barcode || undefined,
+      name: form.name,
+      description: form.description || undefined,
+      purchasePrice: Number(form.purchasePrice) || 0,
+      minStock: Number(form.minStock) || 0,
+      initialStock: form.initialStock ? Number(form.initialStock) : undefined,
       categoryId: Number(form.categoryId),
     };
 
-    onSubmit(
-      normalizedForm as Omit<Product, "id"> & {
-        categoryId: number;
-        initialStock?: number;
-      },
-    );
+    onSubmit(dto);
   };
-
   return (
     <Card title={product ? "Editar producto" : "Nuevo producto"}>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4 ">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Código de barras */}
           <div>
             <label className="block text-lg text-gray-900 dark:text-gray-700">
@@ -99,11 +73,10 @@ export default function ProductForm({
             <input
               type="text"
               name="barcode"
-              value={form.barcode}
+              value={form.barcode ?? ""}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-purple-500
-             dark:bg-gray-200 dark:text-gray-700 h-10"
+              focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
             />
           </div>
 
@@ -118,8 +91,7 @@ export default function ProductForm({
               value={form.name}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-purple-500
-             dark:bg-gray-200 dark:text-gray-700 h-10"
+              focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
               required
             />
           </div>
@@ -131,48 +103,29 @@ export default function ProductForm({
             </label>
             <textarea
               name="description"
-              value={form.description}
+              value={form.description ?? ""}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-purple-500
-             dark:bg-gray-200 dark:text-gray-700 h-10"
+              focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
             />
           </div>
 
-          {/* Precios */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-lg text-gray-900 dark:text-gray-700">
-                Precio compra
-              </label>
-              <input
-                type="number"
-                name="purchasePrice"
-                value={form.purchasePrice}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-purple-500
-             dark:bg-gray-200 dark:text-gray-700 h-10"
-                min={0}
-                step={0.01}
-              />
-            </div>
-            <div>
-              <label className="block text-lg text-gray-900 dark:text-gray-700">
-                Precio venta
-              </label>
-              <input
-                type="number"
-                name="salePrice"
-                value={form.salePrice}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-purple-500
-             dark:bg-gray-200 dark:text-gray-700 h-10"
-                min={0}
-                step={0.01}
-              />
-            </div>
+          {/* Precio compra */}
+          <div>
+            <label className="block text-lg text-gray-900 dark:text-gray-700">
+              Precio compra
+            </label>
+            <input
+              type="number"
+              name="purchasePrice"
+              value={form.purchasePrice}
+              onChange={handleChange}
+              className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
+              focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
+              min={0}
+              step={0.01}
+              required
+            />
           </div>
 
           {/* Stock */}
@@ -187,8 +140,8 @@ export default function ProductForm({
                 value={form.minStock}
                 onChange={handleChange}
                 className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-purple-500
-             dark:bg-gray-200 dark:text-gray-700 h-10"
+              focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
+                min={0}
               />
             </div>
             {!product && (
@@ -202,8 +155,7 @@ export default function ProductForm({
                   value={form.initialStock}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-purple-500
-             dark:bg-gray-200 dark:text-gray-700 h-10"
+              focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
                   min={0}
                 />
               </div>
@@ -220,8 +172,7 @@ export default function ProductForm({
               value={form.categoryId}
               onChange={handleChange}
               className="mt-1 block w-full rounded-lg border-2 border-gray-300 dark:border-gray-600
-              focus:ring-2 focus:ring-purple-500
-             dark:bg-gray-200 dark:text-gray-700 h-10"
+              focus:ring-2 focus:ring-purple-500 dark:bg-gray-200 dark:text-gray-700 h-10"
               required
             >
               <option value={0}>Seleccionar categoría</option>
